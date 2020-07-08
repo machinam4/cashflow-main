@@ -1,14 +1,31 @@
 {
   "name": "admin",
+  "homepage": "http://localhost:3000/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@accounts/apollo-link": "^0.27.0",
+    "@accounts/client": "^0.27.0",
+    "@accounts/client-password": "^0.27.0",
+    "@accounts/graphql-client": "^0.27.0",
+    "@apollo/react-components": "^3.1.5",
+    "@apollo/react-hooks": "^3.1.5",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "apollo-boost": "^0.4.9",
+    "apollo-upload-client": "^13.0.0",
+    "graphql": "^15.2.0",
+    "graphql-tag": "^2.10.3",
+    "notistack": "^0.9.17",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1"
+    "react-dropzone": "^11.0.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-waypoint": "^9.0.3"
   },
   "scripts": {
     "start": "react-scripts start",

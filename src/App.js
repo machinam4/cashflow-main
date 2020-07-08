@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { SnackbarProvider } from 'notistack'
+
+import Signin from "./auth/signin"
+import Dashboard from "./dashboard"
 
 function App() {
+  const Theme = createMuiTheme({
+    palette: {
+      type: 'dark',
+    },
+  });
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={Theme}>
+      <SnackbarProvider
+        maxSnack={3}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right'
+        }}
+      >
+        <BrowserRouter>
+          <Switch>
+            <Route exact path='/' component={Signin} />
+            <Route path='/home' component={Dashboard} />
+          </Switch>
+        </BrowserRouter>
+      </SnackbarProvider>
+    </ThemeProvider>
   );
 }
 

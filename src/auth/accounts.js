@@ -2,7 +2,7 @@ import { AccountsClient } from '@accounts/client'
 import { AccountsClientPassword } from '@accounts/client-password'
 import GraphQLClient from '@accounts/graphql-client'
 import { accountsLink } from '@accounts/apollo-link'
-import { ApolloClient, HttpLink, InMemoryCache, from } from 'apollo-boost'
+import { ApolloClient, InMemoryCache, from } from 'apollo-boost'
 import { createUploadLink } from "apollo-upload-client"
 
 

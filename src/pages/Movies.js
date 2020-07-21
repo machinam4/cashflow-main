@@ -1,7 +1,6 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
 import AddIcon from '@material-ui/icons/Add';
 import MovieIcon from '@material-ui/icons/Movie';
 import Card from '@material-ui/core/Card';
@@ -14,14 +13,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import gql from 'graphql-tag';
 import { Query } from '@apollo/react-components';
 import AddNewMovie from "./components/AddNewMovie"
-import EditMovie from "./components/EditMovie"
+import EditMovie, { DeleteMovie } from "./components/EditMovie"
 
 const useStyles = makeStyles((theme) => ({
     addButton: {
@@ -74,18 +72,21 @@ const MOVIES = gql`
     movies{
     id
     title
+    trailer
+    dlink
     cover 
     path   
   }
   }
 `;
-const cards = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 export default function Movies() {
     const classes = useStyles();
     const [openAdd, setOpenAdd] = React.useState(false);
     const [openEdit, setOpenEdit] = React.useState(false);
     const [EditCard, setEditCard] = React.useState("");
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const [DeleteCard, setDeleteCard] = React.useState('');
 
     const handleOpenAdd = () => {
         setOpenAdd(true);
@@ -93,6 +94,7 @@ export default function Movies() {
 
     const handleCloseAdd = () => {
         setOpenAdd(false);
+        window.location.reload(false);
     };
 
     // handle edit Movies???????
@@ -104,6 +106,19 @@ export default function Movies() {
     const handleCloseEdit = () => {
         setOpenEdit(false);
     };
+
+    //  ***hnadle movie deletion ****//
+    const handleOpenDelete = (card) => {
+        setDeleteCard(card)
+        setOpenDelete(true);
+    };
+
+    const handleCloseDelete = () => {
+        setOpenDelete(false);
+        window.location.reload(false);
+    };
+
+
 
     return (
         <React.Fragment>
@@ -150,6 +165,7 @@ export default function Movies() {
                         {({ loading, error, data }) => {
                             if (loading) return 'Loading...';
                             if (error) return `Error! ${error.message}`;
+
                             return (
                                 <Grid container spacing={4}>
                                     {data.movies.map(movie => (
@@ -167,8 +183,11 @@ export default function Movies() {
                                                     </Typography>
                                                 </CardContent>
                                                 <CardActions>
-                                                    <Button size="small" variant="outlined" color="secondary" onClick={() => { handleOpenEdit(movie) }}>
+                                                    <Button size="small" variant="outlined" color="primary" onClick={() => { handleOpenEdit(movie) }}>
                                                         Edit
+                                                    </Button>
+                                                    <Button size="small" variant="outlined" color="secondary" onClick={() => handleOpenDelete(movie)}>
+                                                        Delete
                                                     </Button>
                                                 </CardActions>
                                             </Card>
@@ -194,12 +213,32 @@ export default function Movies() {
                                         </Fade>
                                     </Modal>
                                     {/* Edit Movie Modal End */}
+                                    {/* Delete Movie Modal */}
+                                    <Modal
+                                        aria-labelledby="Delete-Movie-title"
+                                        aria-describedby="Delete-Movie-description"
+                                        className={classes.modal}
+                                        open={openDelete}
+                                        onClose={handleCloseDelete}
+                                        closeAfterTransition
+                                        BackdropComponent={Backdrop}
+                                        BackdropProps={{
+                                            timeout: 500,
+                                        }}
+                                    >
+                                        <Fade in={openDelete}>
+                                            <div className={classes.paper}>
+                                                <DeleteMovie movie={DeleteCard} closeModal={handleCloseDelete} />
+                                            </div>
+                                        </Fade>
+                                    </Modal>
+                                    {/* Delete Movie Modal End */}
                                 </Grid>
                             )
                         }}
                     </Query>
                 </Container>
             </main>
-        </React.Fragment>
+        </React.Fragment >
     );
 }

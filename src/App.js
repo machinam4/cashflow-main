@@ -4,6 +4,7 @@ import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { SnackbarProvider } from 'notistack'
 
 import Signin from "./auth/signin"
+import { ProtectedRoute } from './auth/userFunctions'
 import Dashboard from "./dashboard"
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
         <BrowserRouter>
           <Switch>
             <Route exact path='/' component={Signin} />
-            <Route path='/home' component={Dashboard} />
+            <ProtectedRoute path='/home' component={Dashboard} />
           </Switch>
         </BrowserRouter>
       </SnackbarProvider>

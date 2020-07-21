@@ -14,7 +14,6 @@ import { withSnackbar } from 'notistack'
 import { Copyright } from "../pages/includes"
 import { login, Message } from "./userFunctions"
 import { useStyles } from "./styles"
-import transitions from '@material-ui/core/styles/transitions';
 
 
 class SignIn extends Component {

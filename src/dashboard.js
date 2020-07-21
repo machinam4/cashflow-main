@@ -12,22 +12,15 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import Badge from '@material-ui/core/Badge';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 //import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
-import PeopleIcon from '@material-ui/icons/People';
-import BarChartIcon from '@material-ui/icons/BarChart';
-import LayersIcon from '@material-ui/icons/Layers';
 import Movies from './pages/Movies';
 import Seasons from './pages/Seasons';
 import { Copyright } from "./pages/includes"
@@ -126,11 +119,10 @@ export default function Dashboard() {
     };
     const logOut = async (e) => {
         e.preventDefault()
-        localStorage.removeItem('usertoken')
+        localStorage.removeItem('cashflowtoken')
         await accountsClient.logout()
         history.push(`/`)
     }
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     return (
         <div className={classes.root}>

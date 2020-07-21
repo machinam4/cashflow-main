@@ -12,40 +12,52 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { useDropzone } from 'react-dropzone';
 import gql from 'graphql-tag';
 import { Mutation } from '@apollo/react-components';
+import { useSnackbar } from 'notistack';
 import { addNewStyles } from '../styles';
 
 
 export default function AddNewSeason(props) {
     const classes = addNewStyles()
     const [title, setTitle] = React.useState('');
-    const [episodes, setEpisodes] = React.useState('');
+    const [trailer, setTrailer] = React.useState('')
+    const [dlink, setDlink] = React.useState('');
     const [files, setFiles] = React.useState([]);
     const [cover, setCover] = React.useState([]);
-
-    const changeTitle = (event) => {
-        setTitle(event.target.value);
-    };
+    const [episodes, setEpisodes] = React.useState('');
+    const { enqueueSnackbar } = useSnackbar();
 
     const changeEpisodes = (event) => {
         setEpisodes(event.target.value);
     };
+    const changeTitle = (event) => {
+        setTitle(event.target.value);
+    };
+    const changeTrailer = (event) => {
+        setTrailer(event.target.value);
+    };
+    const changeDlink = (event) => {
+        setDlink(event.target.value);
+    };
 
     // grqphql operations begin***********
     const ADD_SEASON = gql`
-    mutation AddSeason($title: String!, $episodes: String! $cover: Upload!) {
-        addSeason(title: $title, episodes: $episodes, cover: $cover) {
+    mutation addSeason($title: String!, $episodes:String! $trailer: String!, $dlink: String!, $cover: Upload!) {
+        addSeason(title: $title, episodes: $episodes, trailer:$trailer, dlink:$dlink, cover: $cover) {
         id
         title
         episodes
+        trailer
+        dlink
         cover
         }
-    }
+        }
 `;
 
     const thumbs = files.map(file => (
         <div className={classes.thumb} key={file.name}>
             <div className={classes.thumbInner}>
                 <img
+                    alt="thumbnail"
                     src={file.preview}
                     className={classes.img}
                 />
@@ -83,7 +95,10 @@ export default function AddNewSeason(props) {
                         </Typography>
                         <form className={classes.form} validate="true" onSubmit={e => {
                             e.preventDefault();
-                            addSeason({ variables: { title: title, episodes: episodes, cover: cover } });
+                            if (!trailer.includes("https://www.youtube.com/watch?v=")) {
+                                return enqueueSnackbar('LINK MUST HAVE "https://www.youtube.com/watch?v="', { variant: "error" });
+                            }
+                            addSeason({ variables: { title: title, episodes: episodes, trailer: trailer, dlink: dlink, cover: cover } });
                         }}>
                             <TextField
                                 variant="outlined"
@@ -111,6 +126,34 @@ export default function AddNewSeason(props) {
                                 autoComplete="episodes"
                                 value={episodes}
                                 onChange={changeEpisodes}
+                            />
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                type="text"
+                                fullWidth
+                                id="trailer"
+                                label="Trailer"
+                                name="trailer"
+                                autoComplete="trailer"
+                                value={trailer}
+                                onChange={changeTrailer}
+                                autoFocus
+                            />
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                required
+                                type="text"
+                                fullWidth
+                                id="dlink"
+                                label="Google Drive Link"
+                                name="dlink"
+                                autoComplete="dlink"
+                                value={dlink}
+                                onChange={changeDlink}
+                                autoFocus
                             />
                             <section className="container">
                                 <div {...getRootProps()}>
@@ -140,7 +183,7 @@ export default function AddNewSeason(props) {
                     {loading && <Backdrop className={classes.backdrop} open={true}>
                         <CircularProgress color="inherit" />
                     </Backdrop>}
-                    {error && <p>Error :( Please try again</p>}
+                    {error && <p>{error.message}</p>}
                     {data && props.closeModal()}
                 </Container>
             )}</Mutation>
